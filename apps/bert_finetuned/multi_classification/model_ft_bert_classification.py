@@ -4,6 +4,7 @@ import torch
 import wandb
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
 
+from apps.bert_finetuned.multi_classification.train_test_data import train_dataset, val_dataset, label_map
 from apps.initialize import init
 
 init()
@@ -11,21 +12,6 @@ init()
 # Load the tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased",num_labels=4)
-
-# Define the training and validation datasets
-train_dataset = [("The customer's name is John Smith.", "customer_name"),
-    ("The order total is $50.", "order_total"),
-    ("The product SKU is 12345.", "product_SKU"),
-    ("The shipping address is 123 Main St.", "shipping_address")]
-# list of tuples (input, label)
-val_dataset = [("The customer's name is Anal Sarkar.", "customer_name"),
-    ("The order total is $1000.", "order_total"),
-    ("The product SKU is 22345.", "product_SKU"),
-    ("The shipping address is 456 Main St.", "shipping_address")]
-
-# Define the label mapping
-label_map = {"customer_name": 0, "order_total": 1, "product_SKU": 2, "shipping_address": 3}
-# Add more labels as needed
 
 def tokenize_function(text):
     return tokenizer(text, padding="max_length", truncation=True, max_length=128, return_tensors="pt")

@@ -1,0 +1,5 @@
+﻿COLUMNS_INFO,LABEL_TXT,LABEL_ID
+gl_account company_code  customer_name debit  credit amount,COMPANYCODE,0
+invoice_id Item_name Item_price amount,INVOICE,1
+purchase_order_id vendor_name price_amount,PURCHASE,2
+invoice_id purchase_order_id,INVOICE_PURCHASE,3

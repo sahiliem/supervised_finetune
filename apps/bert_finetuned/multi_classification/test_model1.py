@@ -1,10 +1,14 @@
+import os
+
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 
-text = "The shipping address is B307, Kudlu"
+model_path = os.environ["GENERATED_MODEL"]+'/model'
 
-tokenizer = AutoTokenizer.from_pretrained('model')
-model = AutoModelForSequenceClassification.from_pretrained('model')
+text = "invoiceId amount Item_price"
+
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoModelForSequenceClassification.from_pretrained(model_path)
 
 encoded_input = tokenizer(text, return_tensors='pt')
 #labels = torch.tensor([1]).unsqueeze(0)
@@ -12,7 +16,7 @@ output = model(**encoded_input)
 print(output)
 
 
-pipe = pipeline("text-classification",model ='model',tokenizer=tokenizer)
+pipe = pipeline("text-classification",model =model_path,tokenizer=tokenizer)
 
 output_pipe = pipe(text)
 print(output_pipe)
