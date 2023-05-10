@@ -1,3 +1,5 @@
+import os
+
 import torch
 import wandb
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
@@ -52,7 +54,7 @@ def data_collator(data):
 
 # Define the trainer and training arguments
 training_args = TrainingArguments(
-    output_dir='./results',
+    output_dir=os.environ["GENERATED_MODEL"]+'/results',
     evaluation_strategy = "epoch",
     learning_rate=2e-5,
     per_device_train_batch_size=16,
@@ -76,7 +78,7 @@ trainer.train()
 trainer.evaluate()
 
 # Save the model
-model.save_pretrained('./model')
-tokenizer.save_pretrained('./model')
+model.save_pretrained(os.environ["GENERATED_MODEL"]+'/model')
+tokenizer.save_pretrained(os.environ["GENERATED_MODEL"]+'/model')
 
 wandb.finish()

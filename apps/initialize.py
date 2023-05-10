@@ -10,3 +10,5 @@ def init():
 
     # turn off watch to log faster
     os.environ["WANDB_WATCH"] = "false"
+    os.environ["WANDB_DIR"] = os.environ["GENERATED_MODEL"]
+
