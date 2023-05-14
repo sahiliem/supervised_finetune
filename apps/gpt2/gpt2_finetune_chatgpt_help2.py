@@ -3,7 +3,11 @@ import os
 import wandb
 from transformers import AutoModelForCausalLM, GPT2Tokenizer, TextDataset, DataCollatorForLanguageModeling, Trainer, TrainingArguments
 
+from initialize import init
+
 #https://github.com/huggingface/notebooks/blob/main/examples/language_modeling.ipynb
+
+init()
 
 train_path = 'train_indian_dataset.text'
 test_path = 'test_indian_dataset.text'
