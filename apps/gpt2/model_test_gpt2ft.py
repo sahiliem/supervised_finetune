@@ -4,9 +4,10 @@ from transformers import pipeline, AutoTokenizer, GPT2LMHeadModel
 
 #https://huggingface.co/blog/how-to-generate
 
-text = "To make matar paneer dish"
+text = "How to make Punjabi lobiya masala?"
 
 model_path = os.environ["GENERATED_MODEL"]+'/model'
+model_path = "./mymodel"
 
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
@@ -40,7 +41,7 @@ input_ids = tokenizer.encode(text, return_tensors='pt')
 
 
 
-print("Top K")
+print("=======Top K===============")
 
 sample_output = model.generate(
     input_ids,
@@ -52,7 +53,7 @@ sample_output = model.generate(
 print("Output:\n" + 100 * '-')
 print(tokenizer.decode(sample_output[0], skip_special_tokens=True))
 
-print("top_p")
+print("=======Top_p==============")
 
 sample_output = model.generate(
     input_ids,

@@ -21,6 +21,20 @@ def matched_encoded_text(text):
 dataframe = pd.read_csv("IndianFoodDatasetCSV.csv")
 print(dataframe.keys())
 
+def ingredients(x:str):
+    return str(x) + ".\n "
+def instructions(x:str):
+    return "The instructions recipes follows as : \n"+str(x)
+
+def recipeName(x:str):
+    return "The ingredients for the recipe " + str(x) + " are : \n"
+
+s0 = dataframe['TranslatedRecipeName'].apply(recipeName)
+s1 = dataframe['TranslatedIngredients'].apply(ingredients)
+s2 = dataframe['TranslatedInstructions'].apply(instructions)
+dd  = s0 + s1 + s2
+print(dd)
+
 
 # with open('recipes.json') as f:
 #     data = json.load(f)
@@ -36,11 +50,11 @@ def build_text_files(data_json, dest_path):
             data += summary + "  "
     f.write(data)
 
-train, test = train_test_split(dataframe['TranslatedInstructions'],test_size=0.15)
+train, test = train_test_split(dd,test_size=0.15)
 
 
-build_text_files(train,'train_indian_dataset.text')
-build_text_files(test,'test_indian_dataset.text')
+build_text_files(train,'train_desi_dish_dataset.text')
+build_text_files(test,'test_desi_dish_dataset.text')
 
 print("Train dataset length: "+str(len(train)))
 print("Test dataset length: "+ str(len(test)))
