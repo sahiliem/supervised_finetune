@@ -11,9 +11,9 @@ from master_ai_finetuning.AnotherCustomDataSet import CustomTextDataset
 #https://github.com/huggingface/notebooks/blob/main/examples/language_modeling.ipynb
 
 # start a new wandb run to track this script
-wandb.init(
+run  = wandb.init(
     # set the wandb project where this run will be logged
-    project="AnotherGPT",
+    project="AnotherGPTXXXX",
 
     # track hyperparameters and run metadata
     config={
@@ -55,7 +55,7 @@ checkpoint_interval = 100
 iteration = 0
 
 # Training loop
-num_epochs = 50
+num_epochs = 1
 for epoch in range(num_epochs):
     total_loss = 0
     for batch in train_data_loader:
@@ -77,7 +77,7 @@ for epoch in range(num_epochs):
 
         # Save a checkpoint every checkpoint_interval iterations
         if iteration % checkpoint_interval == 0:
-            checkpoint_path = os.environ["GENERATED_MODEL"] + f"/"+model_name+"/checkpoint_{iteration}.pt"
+            checkpoint_path = os.environ["GENERATED_MODEL"] + f"/"+model_name+"/checkpoint_"+{iteration}+".pt"
             torch.save(model.state_dict(), checkpoint_path)
             print(f"Checkpoint saved at iteration {iteration}")
 
@@ -85,7 +85,7 @@ for epoch in range(num_epochs):
     average_loss = total_loss / len(train_data_loader)
     print(f"Epoch {epoch + 1}/{num_epochs}, Training Loss: {average_loss:.4f}")
     # log metrics to wandb
-    wandb.log({'epoch': epoch+1, "train_loss": average_loss})
+    run.log({'epoch': epoch+1, "train_loss": average_loss})
 
     # Evaluation
     model.eval()
@@ -108,12 +108,19 @@ for epoch in range(num_epochs):
     perplexity = torch.exp(torch.tensor(total_eval_loss / total_tokens))
     print(f"Epoch {epoch + 1}/{num_epochs}, Average Evaluation Loss: {average_eval_loss:.4f}")
     print(f"Epoch {epoch + 1}/{num_epochs}, Perplexity: {perplexity:.4f}")
-    wandb.log({'epoch': epoch + 1, "eval_loss": average_loss})
-    wandb.log({'epoch': epoch + 1, "perplexity": perplexity})
+    run.log({'epoch': epoch + 1, "eval_loss": average_loss})
+    run.log({'epoch': epoch + 1, "perplexity": perplexity})
 
 
 #Save the model
-model.save_pretrained(os.environ["GENERATED_MODEL"]+model_name+"_"+num_epochs)
-tokenizer.save_pretrained(os.environ["GENERATED_MODEL"]+model_name+"_"+num_epochs)
+torch.save(model.state_dict(), os.environ["GENERATED_MODEL"]+"/"+model_name+"_"+str(num_epochs)+".pth")
 
-wandb.finish()
+model.save_pretrained(os.environ["GENERATED_MODEL"]+"/"+model_name+"_"+str(num_epochs))
+tokenizer.save_pretrained(os.environ["GENERATED_MODEL"]+"/"+model_name+"_"+str(num_epochs))
+
+
+artifact = wandb.Artifact('model', type='model')
+artifact.add_file(os.environ["GENERATED_MODEL"]+"/"+model_name+"_"+str(num_epochs)+".pth")
+run.log_artifact(artifact)
+
+run.finish()
