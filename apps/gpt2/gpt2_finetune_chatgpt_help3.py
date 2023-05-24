@@ -65,8 +65,22 @@ trainer = Trainer(
 
 # Fine-tune the model
 trainer.train()
-# Evaluate the model
-trainer.evaluate()
+
+# Define a function to compute perplexity during evaluation
+def compute_perplexity(eval_pred):
+    logits, labels = eval_pred.predictions, eval_pred.label_ids
+    loss = trainer.compute_loss(eval_pred)
+    perplexity = loss.exp()
+    return {'perplexity': perplexity}
+
+# Set the compute_metrics argument in Trainer to use the perplexity function
+trainer.compute_metrics = compute_perplexity
+
+# Evaluate the model and calculate perplexity
+evaluation_result = trainer.evaluate()
+
+print("Perplexity:", evaluation_result["perplexity"])
+
 
 #Save the model
 model.save_pretrained(os.environ["GENERATED_MODEL"]+'/model3')
