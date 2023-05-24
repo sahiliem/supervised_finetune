@@ -83,7 +83,7 @@ for epoch in range(num_epochs):
 
     # Print average loss for the epoch
     average_loss = total_loss / len(train_data_loader)
-    print(f"Epoch {epoch + 1}/{num_epochs}, Average Loss: {average_loss:.4f}")
+    print(f"Epoch {epoch + 1}/{num_epochs}, Training Loss: {average_loss:.4f}")
     # log metrics to wandb
     wandb.log({'epoch': epoch+1, "train_loss": average_loss})
 
@@ -105,7 +105,7 @@ for epoch in range(num_epochs):
 
     # Print average evaluation loss for the epoch
     average_eval_loss = total_eval_loss / len(eval_data_loader)
-    perplexity = torch.exp(total_loss / total_tokens)
+    perplexity = torch.exp(torch.tensor(total_eval_loss / total_tokens))
     print(f"Epoch {epoch + 1}/{num_epochs}, Average Evaluation Loss: {average_eval_loss:.4f}")
     print(f"Epoch {epoch + 1}/{num_epochs}, Perplexity: {perplexity:.4f}")
     wandb.log({'epoch': epoch + 1, "eval_loss": average_loss})
