@@ -101,7 +101,7 @@ for epoch in range(num_epochs):
             loss = outputs.loss
 
             total_eval_loss += loss.item()
-            total_tokens += torch.numel(input_ids["input_ids"])
+            total_tokens += torch.numel(input_ids)
 
     # Print average evaluation loss for the epoch
     average_eval_loss = total_eval_loss / len(eval_data_loader)
